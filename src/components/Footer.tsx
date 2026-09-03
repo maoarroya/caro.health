@@ -95,7 +95,17 @@ export function Footer() {
           <p>
             © {new Date().getFullYear()} caro.health · {brand.role}
           </p>
-          <p>Alta vibración, todos los días.</p>
+          <p className="flex flex-wrap items-center gap-x-5 gap-y-2">
+            <span>Alta vibración, todos los días.</span>
+            <a
+              href="https://kalmiapp.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="link-underline transition-colors hover:text-porcelain"
+            >
+              Powered by Kalmi
+            </a>
+          </p>
         </div>
       </div>
     </footer>
