@@ -6,7 +6,8 @@ import { createHash, timingSafeEqual } from "node:crypto";
 
 const env = () => ({
   publicKey: process.env.WOMPI_PUBLIC_KEY ?? "",
-  integritySecret: process.env.WOMPI_INTEGRITY_SECRET ?? "",
+  // El panel de Wompi la llama "llave de integridad": se aceptan ambos nombres.
+  integritySecret: process.env.WOMPI_INTEGRITY_SECRET || process.env.WOMPI_INTEGRITY_KEY || "",
   eventsSecret: process.env.WOMPI_EVENTS_SECRET ?? "",
 });
 

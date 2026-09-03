@@ -23,7 +23,7 @@ export function formatFromReference(reference: string): BookFormat | undefined {
 // ---- Descarga protegida ---------------------------------------------------
 
 const secret = () =>
-  process.env.BOOK_DOWNLOAD_SECRET || process.env.WOMPI_INTEGRITY_SECRET || "";
+  process.env.BOOK_DOWNLOAD_SECRET || process.env.WOMPI_INTEGRITY_SECRET || process.env.WOMPI_INTEGRITY_KEY || "";
 
 const b64 = (s: string) => Buffer.from(s, "utf8").toString("base64url");
 const unb64 = (s: string) => Buffer.from(s, "base64url").toString("utf8");

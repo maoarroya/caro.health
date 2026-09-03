@@ -30,7 +30,7 @@ export async function GET() {
       pdfPresent: pdf > 0 || Boolean(bookPdfUrl()),
       pdfSource: pdf > 0 ? "archivo local" : bookPdfUrl() ? "BOOK_PDF_URL" : null,
       pdfBytes: pdf,
-      downloadSecret: Boolean(process.env.BOOK_DOWNLOAD_SECRET || process.env.WOMPI_INTEGRITY_SECRET),
+      downloadSecret: Boolean(process.env.BOOK_DOWNLOAD_SECRET || process.env.WOMPI_INTEGRITY_SECRET || process.env.WOMPI_INTEGRITY_KEY),
     },
     siteUrl,
   };
