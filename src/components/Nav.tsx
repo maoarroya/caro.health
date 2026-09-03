@@ -3,19 +3,13 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { nav, brand } from "@/lib/content";
-import { Sprig } from "@/components/Sprig";
+import { Logotipo } from "@/components/Logo";
 
-/** Mirrors the printed lockup: serif name over the mono "The CH Method" rule. */
+/** El logotipo oficial: monograma CH + «Caro Health · bienestar integral». */
 function Wordmark({ onClick }: { onClick?: () => void }) {
   return (
-    <Link href="/" onClick={onClick} className="flex items-center gap-3">
-      <Sprig className="h-7 w-7 text-cocoa" />
-      <span className="flex flex-col leading-none">
-        <span className="display text-2xl text-cocoa">{brand.name}</span>
-        <span className="mono mt-1 text-[0.55rem] uppercase tracking-[0.26em] text-gold-ink">
-          {brand.lockup}
-        </span>
-      </span>
+    <Link href="/" onClick={onClick} className="flex items-center" aria-label={brand.name}>
+      <Logotipo className="h-10 w-auto text-cocoa transition-colors hover:text-espresso lg:h-12" />
     </Link>
   );
 }

@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { nav, brand } from "@/lib/content";
 import { PhotoRail } from "@/components/PhotoRail";
-import { Sprig } from "@/components/Sprig";
+import { Logotipo } from "@/components/Logo";
 import { ps } from "@/lib/photos";
 
 const footerRail = ps(68, 3, 73, 12, 86, 70, 30, 66, 20, 93);
@@ -21,11 +21,8 @@ export function Footer() {
       <div className="mx-auto max-w-7xl px-6 py-20 lg:px-10">
         <div className="grid gap-14 md:grid-cols-[1.4fr_1fr_1fr]">
           <div>
-            <p className="display flex items-center gap-3 text-5xl tracking-tight">
-              <Sprig className="h-9 w-9 text-sand" />
-              {brand.name}
-            </p>
-            <p className="mono mt-3 text-[0.6rem] uppercase tracking-[0.26em] text-gold">
+            <Logotipo className="h-16 w-auto text-sand lg:h-20" />
+            <p className="mono mt-4 text-[0.6rem] uppercase tracking-[0.26em] text-gold">
               {brand.lockup}
             </p>
             <div className="rule-gold mt-5 max-w-xs opacity-60" />

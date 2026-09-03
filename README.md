@@ -9,8 +9,12 @@ El sitio sigue el briefing estratégico de `manual de marca.pdf`:
   profundo `plum #3a264b`, violeta `lavender-deep #5b3a78`, dorado de los
   laureles `gold #b7a87f` (y `gold-ink #806c3e` cuando va como texto) sobre
   papel de lino `cream #f5f2e8`. Definida en `src/app/globals.css`.
-- **Sello sensorial**: el motivo de lavanda vive en `src/components/Sprig.tsx` y
-  en la utilidad `.veil`, que tiñe cualquier fotografía cálida hacia la marca.
+- **Marca**: el isotipo (monograma CH) y el logotipo viven en
+  `src/components/Logo.tsx` y heredan `currentColor`; las versiones estáticas
+  están en `public/brand/` (originales en `public/brand/originales/`). `Sprig`
+  se mantiene como alias del isotipo para viñetas y kickers. El favicon sale de
+  `src/app/icon.svg`. La utilidad `.veil` tiñe cualquier fotografía cálida hacia
+  la marca.
 - **Arquitectura**: Home · Libro · Certificaciones de Pilates · Pilates, Barre y
   Yoga virtual en casa · Asesorías nutricionales · Conferencias · Retiros
   wellness y experiencias · Blog,
