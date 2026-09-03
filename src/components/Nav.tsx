@@ -3,6 +3,22 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { nav, brand } from "@/lib/content";
+import { Sprig } from "@/components/Sprig";
+
+/** Mirrors the printed lockup: serif name over the mono "The CH Method" rule. */
+function Wordmark({ onClick }: { onClick?: () => void }) {
+  return (
+    <Link href="/" onClick={onClick} className="flex items-center gap-3">
+      <Sprig className="h-7 w-7 text-cocoa" />
+      <span className="flex flex-col leading-none">
+        <span className="display text-2xl text-cocoa">{brand.name}</span>
+        <span className="mono mt-1 text-[0.55rem] uppercase tracking-[0.26em] text-gold-ink">
+          {brand.lockup}
+        </span>
+      </span>
+    </Link>
+  );
+}
 
 export function Nav() {
   const [scrolled, setScrolled] = useState(false);
@@ -17,11 +33,7 @@ export function Nav() {
 
   useEffect(() => {
     const root = document.documentElement;
-    if (open) {
-      root.style.overflow = "hidden";
-    } else {
-      root.style.overflow = "";
-    }
+    root.style.overflow = open ? "hidden" : "";
     return () => {
       root.style.overflow = "";
     };
@@ -32,26 +44,19 @@ export function Nav() {
       <header
         className={`fixed inset-x-0 top-0 z-50 transition-all duration-500 ${
           scrolled && !open
-            ? "bg-cream/85 backdrop-blur-xl border-b border-line/70"
-            : "bg-transparent border-b border-transparent"
+            ? "border-b border-line/80 bg-porcelain/85 backdrop-blur-xl"
+            : "border-b border-transparent bg-transparent"
         }`}
       >
         <nav className="mx-auto flex h-16 max-w-7xl items-center justify-between px-5 lg:h-20 lg:px-8">
-          <Link
-            href="/"
-            className="display text-2xl leading-none tracking-tight text-ink"
-            onClick={() => setOpen(false)}
-          >
-            {brand.name}
-            <span className="text-oxblood">.</span>
-          </Link>
+          <Wordmark onClick={() => setOpen(false)} />
 
-          <div className="hidden items-center gap-8 md:flex">
+          <div className="hidden items-center gap-6 lg:flex">
             {nav.map((item) => (
               <Link
                 key={item.href}
                 href={item.href}
-                className="mono link-underline text-xs uppercase tracking-wide text-ink/70 transition-colors hover:text-ink"
+                className="mono link-underline text-xs uppercase tracking-[0.12em] text-slate transition-colors hover:text-espresso"
               >
                 {item.label}
               </Link>
@@ -60,58 +65,45 @@ export function Nav() {
 
           <div className="flex items-center gap-3">
             <Link
-              href="/cursos"
-              className="mono hidden rounded-full bg-ink px-5 py-2.5 text-xs uppercase tracking-wide text-cream transition-all hover:bg-oxblood md:inline-block"
+              href="/asesorias#postulacion"
+              className="mono hidden rounded-full bg-espresso px-5 py-2.5 text-xs uppercase tracking-[0.12em] text-porcelain transition-colors hover:bg-cocoa xl:inline-block"
             >
-              Semana gratis
+              Postular
             </Link>
             <button
               aria-label="Abrir menú"
               aria-expanded={open}
               onClick={() => setOpen(true)}
-              className="flex h-11 w-11 flex-col items-center justify-center gap-1.5 rounded-full border border-line bg-cream/60 backdrop-blur md:hidden"
+              className="flex h-11 w-11 flex-col items-center justify-center gap-1.5 rounded-full border border-line bg-porcelain/70 backdrop-blur lg:hidden"
             >
-              <span className="block h-px w-5 bg-ink" />
-              <span className="block h-px w-5 bg-ink" />
+              <span className="block h-px w-5 bg-espresso" />
+              <span className="block h-px w-5 bg-espresso" />
             </button>
           </div>
         </nav>
       </header>
 
-      {/* Mobile full-screen menu — solid background, sits above everything */}
+      {/* Mobile full-screen menu */}
       <div
         aria-hidden={!open}
-        className={`fixed inset-0 z-[80] flex flex-col overflow-hidden bg-cream px-5 transition-[opacity,transform] duration-300 ease-out md:hidden ${
+        className={`fixed inset-0 z-80 flex flex-col overflow-hidden bg-porcelain px-5 transition-[opacity,transform] duration-300 ease-out lg:hidden ${
           open
             ? "pointer-events-auto translate-y-0 opacity-100"
             : "pointer-events-none -translate-y-3 opacity-0"
         }`}
       >
-        {/* absolute close button — always top-right, immune to layout */}
         <button
           aria-label="Cerrar menú"
           onClick={() => setOpen(false)}
-          className="absolute right-5 top-2.5 z-10 flex h-11 w-11 items-center justify-center rounded-full border border-ink/25 bg-cream text-ink transition-colors hover:bg-ink hover:text-cream"
+          className="absolute right-5 top-2.5 z-10 flex h-11 w-11 items-center justify-center rounded-full border border-line-strong bg-porcelain text-espresso transition-colors hover:bg-espresso hover:text-porcelain"
         >
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden>
-            <path
-              d="M1 1L15 15M15 1L1 15"
-              stroke="currentColor"
-              strokeWidth="1.6"
-            />
+            <path d="M1 1L15 15M15 1L1 15" stroke="currentColor" strokeWidth="1.6" />
           </svg>
         </button>
 
-        {/* menu top row mirrors the header bar */}
         <div className="flex h-16 shrink-0 items-center">
-          <Link
-            href="/"
-            className="display text-2xl leading-none tracking-tight text-ink"
-            onClick={() => setOpen(false)}
-          >
-            {brand.name}
-            <span className="text-oxblood">.</span>
-          </Link>
+          <Wordmark onClick={() => setOpen(false)} />
         </div>
 
         <nav className="flex flex-1 flex-col pt-4">
@@ -120,24 +112,24 @@ export function Nav() {
               key={item.href}
               href={item.href}
               onClick={() => setOpen(false)}
-              className="display border-b border-line/70 py-5 text-4xl text-ink"
+              className="display border-b border-line py-5 text-4xl text-espresso"
             >
               {item.label}
             </Link>
           ))}
           <Link
-            href="/cursos"
+            href="/asesorias#postulacion"
             onClick={() => setOpen(false)}
-            className="mono mt-8 rounded-full bg-ink px-6 py-4 text-center text-xs uppercase tracking-wide text-cream"
+            className="mono mt-8 rounded-full bg-espresso px-6 py-4 text-center text-xs uppercase tracking-[0.14em] text-porcelain"
           >
-            Empieza con una semana gratis
+            Postular a una asesoría
           </Link>
 
           <a
             href={brand.instagram}
             target="_blank"
             rel="noopener noreferrer"
-            className="mono mt-auto py-6 text-xs uppercase tracking-wide text-ink/60"
+            className="mono mt-auto py-6 text-xs uppercase tracking-[0.12em] text-slate/60"
           >
             @{brand.handle} ↗
           </a>

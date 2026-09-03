@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:www.lottiemurphy.com)",
+      "WebFetch(domain:www.instagram.com)",
+      "Bash(npx --yes create-next-app@latest . --ts --tailwind --app --eslint --src-dir --import-alias \"@/*\" --no-turbopack --use-npm --yes)",
+      "Bash(npx --yes create-next-app@latest caro-health --ts --tailwind --app --eslint --src-dir --import-alias \"@/*\" --no-turbopack --use-npm --yes)",
+      "Bash(cat postcss.config.mjs)",
+      "Bash(cat tailwind.config.ts)",
+      "Bash(curl -s -L \"https://www.lottiemurphy.com/\" -o lottie.html -A \"Mozilla/5.0 \\(Macintosh; Intel Mac OS X 10_15_7\\) AppleWebKit/537.36 \\(KHTML, like Gecko\\) Chrome/120 Safari/537.36\")",
+      "Bash(grep -oiE \"<h[1-3][^>]*>[^<]{3,120}\" lottie.html)",
+      "Bash(python3 -)",
+      "Bash(node -e ' *)"
+    ]
+  }
+}

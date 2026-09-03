@@ -1,70 +1,121 @@
-import Image from "next/image";
-import { testimonials, images } from "@/lib/content";
-import { Reveal, RevealGroup, RevealItem, TextReveal } from "@/components/Reveal";
+"use client";
+
+import { useEffect, useRef, useState } from "react";
+import { animate, motion, useMotionValue } from "motion/react";
+import { Frame } from "@/components/Frame";
+import { Reveal, TextReveal } from "@/components/Reveal";
+import { testimonials } from "@/lib/content";
+
+const EASE = [0.22, 1, 0.36, 1] as const;
 
 export function Testimonials() {
-  const [featured, ...rest] = testimonials;
+  const viewport = useRef<HTMLDivElement>(null);
+  const track = useRef<HTMLDivElement>(null);
+  const [limit, setLimit] = useState(0);
+  const x = useMotionValue(0);
+
+  useEffect(() => {
+    const measure = () => {
+      if (!viewport.current || !track.current) return;
+      setLimit(
+        Math.max(
+          0,
+          track.current.scrollWidth - viewport.current.offsetWidth + 20,
+        ),
+      );
+    };
+    measure();
+    window.addEventListener("resize", measure);
+    return () => window.removeEventListener("resize", measure);
+  }, []);
+
+  // The arrows drive the same motion value the drag gesture writes to, so the
+  // two input methods can never disagree about where the rail is.
+  const nudge = (dir: number) => {
+    const next = Math.min(0, Math.max(-limit, x.get() - dir * 420));
+    animate(x, next, { duration: 0.7, ease: EASE });
+  };
+
   return (
-    <section id="historias" className="px-5 py-24 lg:px-8 lg:py-32">
-      <div className="mx-auto max-w-7xl">
-        <Reveal>
-          <p className="eyebrow text-oxblood">Lo que dicen las alumnas</p>
-        </Reveal>
-        <h2 className="display mt-5 max-w-3xl text-5xl text-ink lg:text-7xl">
-          <TextReveal text="Muévete con Caro y miles de personas en todo el mundo." />
-        </h2>
+    <section id="historias" className="py-24 lg:py-32">
+      <div className="mx-auto max-w-7xl px-5 lg:px-8">
+        <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
+          <div>
+            <Reveal>
+              <p className="eyebrow text-cocoa">Transformaciones</p>
+            </Reveal>
+            <h2 className="display mt-6 max-w-3xl text-5xl text-espresso lg:text-7xl">
+              <TextReveal text="Lo que pasa cuando el plato y la práctica van juntos." />
+            </h2>
+          </div>
 
-        <div className="mt-14 grid gap-6 lg:grid-cols-[1.15fr_1fr]">
-          {/* Featured quote over image */}
-          <Reveal>
-            <figure className="relative flex min-h-[26rem] flex-col justify-end overflow-hidden rounded-3xl bg-ink p-8 text-cream lg:p-12">
-              <Image
-                src={images.testimonials[0]}
-                alt=""
-                fill
-                sizes="(max-width: 1024px) 90vw, 55vw"
-                className="object-cover"
-              />
-              <div className="absolute inset-0 bg-linear-to-t from-ink via-ink/50 to-ink/10" />
-              <blockquote className="relative">
-                <p className="text-amber">★★★★★</p>
-                <p className="display mt-4 text-3xl leading-[1.05] lg:text-4xl">
-                  “{featured.quote}”
-                </p>
-                <figcaption className="mono mt-6 text-xs uppercase tracking-wide text-cream/70">
-                  {featured.name}
-                </figcaption>
-              </blockquote>
-            </figure>
+          <Reveal delay={0.1}>
+            <div className="flex gap-2">
+              <button
+                type="button"
+                onClick={() => nudge(-1)}
+                aria-label="Anterior"
+                className="mono h-12 w-12 rounded-full border border-line-strong text-espresso transition-colors hover:border-cocoa hover:bg-cocoa hover:text-porcelain"
+              >
+                ←
+              </button>
+              <button
+                type="button"
+                onClick={() => nudge(1)}
+                aria-label="Siguiente"
+                className="mono h-12 w-12 rounded-full border border-line-strong text-espresso transition-colors hover:border-cocoa hover:bg-cocoa hover:text-porcelain"
+              >
+                →
+              </button>
+            </div>
           </Reveal>
-
-          {/* Right: quote cards with thumbnails */}
-          <RevealGroup className="flex flex-col gap-6">
-            {rest.slice(0, 3).map((t, i) => (
-              <RevealItem key={t.name}>
-                <figure className="flex gap-5 rounded-2xl border border-line bg-cream p-5">
-                  <div className="relative h-24 w-20 shrink-0 overflow-hidden rounded-xl bg-taupe">
-                    <Image
-                      src={images.testimonials[(i % 2) + 1]}
-                      alt=""
-                      fill
-                      sizes="80px"
-                      className="object-cover"
-                    />
-                  </div>
-                  <div className="flex flex-col justify-between">
-                    <blockquote className="text-[15px] leading-relaxed text-ink">
-                      “{t.quote}”
-                    </blockquote>
-                    <figcaption className="mono mt-3 text-xs uppercase tracking-wide text-ink/60">
-                      {t.name}
-                    </figcaption>
-                  </div>
-                </figure>
-              </RevealItem>
-            ))}
-          </RevealGroup>
         </div>
+      </div>
+
+      {/* Drag or throw it — constraints are measured, so it never runs dry. */}
+      <div
+        ref={viewport}
+        className="mt-14 overflow-hidden pl-5 lg:pl-[max(2rem,calc((100vw-80rem)/2+2rem))]"
+      >
+        <motion.div
+          ref={track}
+          style={{ x }}
+          drag="x"
+          dragConstraints={{ left: -limit, right: 0 }}
+          dragElastic={0.08}
+          dragTransition={{ power: 0.25, timeConstant: 320 }}
+          className="grab flex w-max gap-5 pr-5"
+        >
+          {testimonials.map((t, i) => (
+            <motion.figure
+              key={t.name}
+              initial={{ opacity: 0, y: 26 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-60px" }}
+              transition={{ duration: 0.7, ease: EASE, delay: (i % 3) * 0.08 }}
+              className="flex w-[80vw] shrink-0 flex-col overflow-hidden rounded-4xl border border-line bg-porcelain sm:w-104"
+            >
+              <Frame
+                photo={t.photo}
+                alt={t.name}
+                className="aspect-4/3"
+                imgClassName="object-top"
+                sizes="(max-width: 640px) 80vw, 420px"
+              />
+              <div className="flex flex-1 flex-col justify-between p-7">
+                <blockquote>
+                  <p className="display text-2xl leading-snug text-espresso">
+                    “{t.quote}”
+                  </p>
+                </blockquote>
+                <figcaption className="mono mt-6 text-xs uppercase tracking-[0.14em] text-slate">
+                  {t.name}
+                  <span className="block text-cocoa">{t.detail}</span>
+                </figcaption>
+              </div>
+            </motion.figure>
+          ))}
+        </motion.div>
       </div>
     </section>
   );

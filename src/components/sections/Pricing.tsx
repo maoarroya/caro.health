@@ -1,8 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import Image from "next/image";
 import Link from "next/link";
+import { Frame } from "@/components/Frame";
+import { Sprig } from "@/components/Sprig";
 import { membership, images } from "@/lib/content";
 import { Reveal } from "@/components/Reveal";
 
@@ -11,41 +12,39 @@ export function Pricing() {
   const plan = annual ? membership.annual : membership.monthly;
 
   return (
-    <section id="precios" className="px-5 lg:px-8">
+    <section id="membresia" className="px-5 lg:px-8">
       <div className="mx-auto max-w-7xl">
-        <div className="relative overflow-hidden rounded-3xl bg-ink p-5 text-cream lg:p-6">
-          <div className="grid gap-5 lg:grid-cols-[1fr_1fr]">
-            {/* Image panel */}
+        <div className="relative overflow-hidden rounded-4xl bg-espresso p-5 text-porcelain lg:p-6">
+          <div className="grid gap-5 lg:grid-cols-2">
             <Reveal>
-              <div className="relative aspect-4/5 overflow-hidden rounded-2xl bg-taupe lg:aspect-auto lg:h-full">
-                <Image
-                  src={images.pricing}
-                  alt="Práctica de Pilates con Caro"
-                  fill
+              <div className="veil relative aspect-4/5 overflow-hidden rounded-3xl lg:aspect-auto lg:h-full">
+                <Frame
+                  photo={images.hero.tall}
+                  alt="Práctica en casa"
+                  className="h-full w-full"
                   sizes="(max-width: 1024px) 90vw, 45vw"
-                  className="object-cover"
                 />
-                <div className="absolute inset-x-0 bottom-0 p-6">
-                  <p className="eyebrow text-cream/80">{membership.eyebrow}</p>
-                  <p className="display mt-3 text-4xl text-cream lg:text-5xl">
+                <div className="absolute inset-0 bg-linear-to-t from-espresso/80 via-transparent to-transparent" />
+                <div className="absolute inset-x-0 bottom-0 z-10 p-7">
+                  <p className="eyebrow text-sand">
+                    {membership.eyebrow}
+                  </p>
+                  <p className="display mt-3 text-4xl text-porcelain lg:text-5xl">
                     {membership.title}
                   </p>
                 </div>
-                <div className="absolute inset-0 bg-linear-to-t from-ink/70 via-transparent to-transparent" />
               </div>
             </Reveal>
 
-            {/* Price card */}
             <Reveal delay={0.08}>
-              <div className="flex h-full flex-col rounded-2xl bg-cream p-8 text-ink lg:p-10">
-                <p className="text-ink/70">{membership.subtitle}</p>
+              <div className="flex h-full flex-col rounded-3xl bg-porcelain p-8 text-espresso lg:p-10">
+                <p className="text-slate">{membership.subtitle}</p>
 
-                {/* Toggle */}
-                <div className="mono mt-6 flex items-center gap-1 self-start rounded-full bg-ink/5 p-1 text-xs uppercase tracking-wide">
+                <div className="mono mt-7 flex items-center gap-1 self-start rounded-full bg-linen p-1 text-xs uppercase tracking-[0.12em]">
                   <button
                     onClick={() => setAnnual(false)}
                     className={`rounded-full px-4 py-2 transition-colors ${
-                      !annual ? "bg-ink text-cream" : "text-ink/60"
+                      !annual ? "bg-espresso text-porcelain" : "text-slate"
                     }`}
                   >
                     Mes a mes
@@ -53,39 +52,41 @@ export function Pricing() {
                   <button
                     onClick={() => setAnnual(true)}
                     className={`rounded-full px-4 py-2 transition-colors ${
-                      annual ? "bg-ink text-cream" : "text-ink/60"
+                      annual ? "bg-espresso text-porcelain" : "text-slate"
                     }`}
                   >
                     Anual
                   </button>
                 </div>
 
-                <div className="mt-6 flex items-end gap-2">
-                  <span className="display text-7xl text-ink">{plan.price}</span>
-                  <span className="mono mb-2 text-sm text-ink/60">
+                <div className="mt-7 flex items-end gap-2">
+                  <span className="display text-7xl text-espresso">
+                    {plan.price}
+                  </span>
+                  <span className="mono mb-3 text-sm text-slate">
                     {plan.period}
                   </span>
                 </div>
-                <p className="mono mt-1 text-xs uppercase tracking-wide text-oxblood">
+                <p className="mono mt-1 text-xs uppercase tracking-[0.12em] text-cocoa">
                   {plan.note}
                 </p>
 
-                <ul className="mt-6 grid flex-1 gap-2.5 text-sm text-ink/80">
-                  {membership.perks.map((f) => (
-                    <li key={f} className="flex items-start gap-3">
-                      <span className="mt-0.5 text-oxblood">✦</span>
-                      {f}
+                <ul className="mt-7 grid flex-1 gap-3 text-sm text-slate">
+                  {membership.perks.map((perk) => (
+                    <li key={perk} className="flex items-start gap-3">
+                      <Sprig className="mt-0.5 h-4 w-4 shrink-0 text-cocoa" />
+                      {perk}
                     </li>
                   ))}
                 </ul>
 
                 <Link
-                  href="/cursos"
-                  className="mono mt-8 rounded-full bg-ink px-6 py-4 text-center text-xs uppercase tracking-wide text-cream transition-colors hover:bg-oxblood"
+                  href="/virtual#biblioteca"
+                  className="mono mt-9 rounded-full bg-espresso px-6 py-4 text-center text-xs uppercase tracking-[0.14em] text-porcelain transition-colors hover:bg-cocoa"
                 >
-                  Empieza con una semana gratis
+                  Empezar a practicar
                 </Link>
-                <p className="mono mt-3 text-center text-xs text-ink/50">
+                <p className="mono mt-3 text-center text-xs text-slate/60">
                   Sin permanencia · Cancela cuando quieras
                 </p>
               </div>

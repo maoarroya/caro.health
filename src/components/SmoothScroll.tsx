@@ -2,6 +2,7 @@
 
 import { useEffect } from "react";
 import Lenis from "lenis";
+import { registerScroller } from "@/lib/scroll-lock";
 
 export function SmoothScroll() {
   useEffect(() => {
@@ -13,6 +14,7 @@ export function SmoothScroll() {
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       smoothWheel: true,
     });
+    registerScroller(lenis);
 
     // Anchor links → smooth scroll via Lenis
     const onClick = (e: MouseEvent) => {
@@ -40,6 +42,7 @@ export function SmoothScroll() {
     return () => {
       cancelAnimationFrame(raf);
       document.removeEventListener("click", onClick);
+      registerScroller(null);
       lenis.destroy();
     };
   }, []);

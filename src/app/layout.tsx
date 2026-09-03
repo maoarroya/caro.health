@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Host_Grotesk, Fragment_Mono } from "next/font/google";
+import { Host_Grotesk, Fragment_Mono, Cormorant_Garamond } from "next/font/google";
 import "./globals.css";
 import { Nav } from "@/components/Nav";
 import { Footer } from "@/components/Footer";
@@ -9,6 +9,14 @@ import { ScrollProgress } from "@/components/ScrollProgress";
 const host = Host_Grotesk({
   variable: "--font-host",
   subsets: ["latin"],
+  display: "swap",
+});
+
+const cormorant = Cormorant_Garamond({
+  variable: "--font-cormorant",
+  subsets: ["latin"],
+  weight: ["300", "400", "500"],
+  style: ["normal", "italic"],
   display: "swap",
 });
 
@@ -22,23 +30,29 @@ const fragment = Fragment_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL("https://caro.health"),
   title: {
-    default: "Caro · Pilates Master — Movimiento consciente",
-    template: "%s · Caro Pilates",
+    default: "caro.health — Nutrición, Pilates, Yoga, Barre & Meditación",
+    template: "%s · caro.health",
   },
   description:
-    "Caro es instructora master de Pilates. Programas y cursos online para reconectar con tu cuerpo, ganar fuerza y moverte con intención — desde donde estés.",
+    "El CH Method: nutrición clínica integral fusionada con movimiento consciente. Libro, certificaciones de Pilates, clases virtuales en casa, asesorías nutricionales, conferencias, retiros wellness y blog.",
   keywords: [
-    "pilates",
+    "nutrición clínica",
+    "nutricionista",
+    "CH Method",
     "pilates online",
-    "instructora master pilates",
-    "cursos pilates",
-    "movimiento consciente",
+    "certificación pilates",
+    "conferencias wellness",
+    "retiros wellness",
+    "yoga",
+    "barre",
+    "meditación",
+    "wellness de lujo",
     "caro health",
   ],
   openGraph: {
-    title: "Caro · Pilates Master",
+    title: "caro.health",
     description:
-      "Programas y cursos online de Pilates para moverte con fuerza e intención.",
+      "Nutrición clínica integral y movimiento consciente. La disciplina como el acto definitivo de amor propio.",
     type: "website",
     locale: "es_ES",
   },
@@ -52,9 +66,9 @@ export default function RootLayout({
   return (
     <html
       lang="es"
-      className={`${host.variable} ${fragment.variable} h-full antialiased`}
+      className={`${host.variable} ${fragment.variable} ${cormorant.variable} h-full antialiased`}
     >
-      <body className="grain min-h-full bg-cream text-ink flex flex-col">
+      <body className="grain min-h-full bg-cream text-espresso flex flex-col">
         <SmoothScroll />
         <ScrollProgress />
         <Nav />

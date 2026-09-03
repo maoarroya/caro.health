@@ -1,83 +1,75 @@
-import Image from "next/image";
 import Link from "next/link";
-import { images, brand } from "@/lib/content";
+import { images, home, brand } from "@/lib/content";
+import { Frame } from "@/components/Frame";
+import { Sprig } from "@/components/Sprig";
 import { Reveal, TextReveal } from "@/components/Reveal";
 
 export function Hero() {
   return (
-    <section className="px-3 pt-20 lg:px-4 lg:pt-24">
-      <div className="mx-auto max-w-[1600px]">
-        {/* Big image-forward hero */}
-        <div className="relative overflow-hidden rounded-3xl bg-taupe">
-          <div className="relative aspect-3/4 w-full sm:aspect-video lg:aspect-16/8">
-            <Image
-              src={images.heroMain}
-              alt="Caro practicando Pilates"
-              fill
-              priority
-              sizes="100vw"
-              className="animate-kenburns object-cover object-center"
-            />
-            <div className="absolute inset-0 bg-linear-to-r from-cream/85 via-cream/25 to-transparent" />
-            <div className="absolute inset-0 bg-linear-to-t from-ink/25 via-transparent to-transparent" />
-          </div>
+    <section className="relative h-[94svh] min-h-136 w-full overflow-hidden">
+      <Frame
+        photo={images.hero.tall}
+        alt="Caro en el estudio"
+        className="absolute inset-0 h-full w-full lg:hidden"
+        imgClassName="animate-kenburns"
+        sizes="100vw"
+      />
+      <Frame
+        photo={images.hero.wide}
+        alt="Caro en el estudio"
+        className="absolute inset-0 hidden h-full w-full lg:block"
+        imgClassName="animate-kenburns"
+        sizes="100vw"
+      />
 
-          {/* Overlaid copy */}
-          <div className="absolute inset-0 flex flex-col justify-between p-6 lg:p-12">
-            <div>
-              <Reveal>
-                <p className="eyebrow flex items-center gap-3 text-oxblood">
-                  <span className="h-2 w-2 rounded-full bg-oxblood" />
-                  {brand.role} · @{brand.handle}
-                </p>
-              </Reveal>
-              <h1 className="display mt-5 max-w-[13ch] text-[2.6rem] leading-[0.9] text-ink sm:text-7xl sm:leading-[0.86] lg:text-8xl">
-                <TextReveal text="Tu estudio de Pilates, donde estés." delay={0.1} />
-              </h1>
+      {/* Warm veil + reading scrim: phones read from the bottom, desktop
+          from the left. Both stop short so the frame keeps its air. */}
+      <div className="absolute inset-0 bg-linear-to-br from-mocha/25 via-transparent to-mocha/10 mix-blend-multiply" />
+      <div className="absolute inset-0 bg-linear-to-t from-porcelain from-20% via-porcelain/70 via-52% to-transparent to-82% lg:hidden" />
+      <div className="absolute inset-0 hidden bg-linear-to-r from-porcelain from-8% via-porcelain/60 via-48% to-transparent to-88% lg:block" />
+
+      {/* pt clears the fixed header at every size — the block never rides under it. */}
+      <div className="relative flex h-full items-end px-6 pb-14 pt-24 lg:items-center lg:px-16 lg:pb-0 lg:pt-20">
+        <div className="max-w-2xl">
+          <Reveal>
+            <p className="eyebrow flex items-start gap-3 text-cocoa">
+              <Sprig className="mt-px h-4 w-4 shrink-0" />
+              {home.hero.eyebrow}
+            </p>
+          </Reveal>
+
+          <h1 className="display mt-6 max-w-[14ch] text-[2.9rem] leading-[1.02] text-espresso sm:text-6xl lg:mt-7 lg:text-[5.4rem]">
+            <TextReveal text={home.hero.title} delay={0.05} />
+          </h1>
+
+          <Reveal delay={0.14}>
+            <p className="mt-7 max-w-md text-base leading-relaxed text-slate lg:text-lg">
+              {home.hero.body}
+            </p>
+          </Reveal>
+
+          <Reveal delay={0.2}>
+            <div className="mt-8 flex flex-wrap gap-3 lg:mt-10">
+              <Link
+                href={home.hero.primary.href}
+                className="mono rounded-full bg-espresso px-7 py-4 text-xs uppercase tracking-[0.14em] text-porcelain transition-colors hover:bg-cocoa"
+              >
+                {home.hero.primary.label}
+              </Link>
+              <Link
+                href={home.hero.secondary.href}
+                className="mono inline-flex items-center gap-2 rounded-full border border-espresso/20 px-7 py-4 text-xs uppercase tracking-[0.14em] text-espresso transition-colors hover:border-cocoa hover:text-cocoa"
+              >
+                {home.hero.secondary.label} →
+              </Link>
             </div>
+          </Reveal>
 
-            <div className="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
-              <Reveal delay={0.1}>
-                <p className="max-w-sm text-base leading-relaxed text-ink/85 sm:text-lg">
-                  Muévete con Caro y miles de personas en todo el mundo. Sin
-                  prisa, sin postureo.
-                </p>
-              </Reveal>
-              <Reveal delay={0.15}>
-                <div className="flex flex-wrap gap-3">
-                  <Link
-                    href="/cursos"
-                    className="mono rounded-full bg-ink px-6 py-4 text-xs uppercase tracking-wide text-cream transition-colors hover:bg-oxblood"
-                  >
-                    Empieza la semana gratis
-                  </Link>
-                  <Link
-                    href="/#metodo"
-                    className="mono inline-flex items-center gap-2 rounded-full bg-cream/90 px-6 py-4 text-xs uppercase tracking-wide text-ink backdrop-blur transition-colors hover:bg-cream"
-                  >
-                    El método →
-                  </Link>
-                </div>
-              </Reveal>
-            </div>
-          </div>
-        </div>
-
-        {/* Decorative image strip — every frame a photo */}
-        <div className="mt-3 grid grid-cols-2 gap-3 lg:grid-cols-4">
-          {images.strip.map((src, i) => (
-            <Reveal key={i} delay={0.05 * i}>
-              <div className="relative aspect-square overflow-hidden rounded-2xl bg-taupe lg:aspect-4/5">
-                <Image
-                  src={src}
-                  alt=""
-                  fill
-                  sizes="(max-width: 1024px) 50vw, 25vw"
-                  className="object-cover"
-                />
-              </div>
-            </Reveal>
-          ))}
+          <Reveal delay={0.26}>
+            <p className="mono mt-8 hidden text-[0.68rem] uppercase tracking-[0.16em] text-slate/60 sm:block lg:mt-10">
+              {brand.role}
+            </p>
+          </Reveal>
         </div>
       </div>
     </section>

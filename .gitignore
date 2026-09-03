@@ -24,6 +24,9 @@
 .DS_Store
 *.pem
 
+# raw camera output — optimized copies live in /public/photos
+/pictures
+
 # debug
 npm-debug.log*
 yarn-debug.log*
@@ -39,3 +42,15 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# local python env for scripts/optimize-photos.py
+/.venv
+
+# el libro en PDF se vende, no se versiona
+/private/*
+!/private/README.md
+!.env.example
+
+# material de marca en bruto (repo público): no se versiona
+/manual de marca.pdf
+/WhatsApp Image *.jpeg

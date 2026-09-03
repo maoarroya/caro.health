@@ -1,14 +1,7 @@
 "use client";
 
-import {
-  motion,
-  useInView,
-  useScroll,
-  useTransform,
-  animate,
-  type Variants,
-} from "motion/react";
-import { useEffect, useRef, useState, type ReactNode } from "react";
+import { motion, useScroll, useTransform, type Variants } from "motion/react";
+import { useRef, type ReactNode } from "react";
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 
@@ -136,44 +129,6 @@ export function TextReveal({
         </span>
       ))}
     </motion.span>
-  );
-}
-
-/** Count-up number that animates when scrolled into view. */
-export function Counter({
-  to,
-  suffix = "",
-  className,
-  format = false,
-}: {
-  to: number;
-  suffix?: string;
-  className?: string;
-  format?: boolean;
-}) {
-  const ref = useRef<HTMLSpanElement>(null);
-  const inView = useInView(ref, { once: true, margin: "-60px" });
-  const [val, setVal] = useState(0);
-
-  useEffect(() => {
-    if (!inView) return;
-    const controls = animate(0, to, {
-      duration: 1.4,
-      ease: EASE,
-      onUpdate: (v) => setVal(v),
-    });
-    return () => controls.stop();
-  }, [inView, to]);
-
-  const display = format
-    ? Math.round(val).toLocaleString("es-ES")
-    : Math.round(val).toString();
-
-  return (
-    <span ref={ref} className={className}>
-      {display}
-      {suffix}
-    </span>
   );
 }
 

@@ -1,20 +1,24 @@
 @import "tailwindcss";
 
 @theme {
-  /* Palette pulled from lottiemurphy.com — warm cream + oxblood + playful pops */
-  --color-cream: #faf4e9;
-  --color-ink: #1d1c21;
-  --color-oxblood: #300000;
-  --color-peri: #bcc5da;
-  --color-peri-2: #adb8d2;
-  --color-taupe: #b5a898;
-  --color-amber: #fdb022;
-  --color-lilac: #d69cff;
-  --color-moss: #206408;
-  --color-butter: #fffda6;
-  --color-line: #d9cdba;
-  --color-line-dark: #4a2a2a;
+  /* Caro Health — toda la escala nace del color de marca #bcafa6 (greige
+     cálido, tono 24°): mismo matiz, distinta luminosidad. El dorado del
+     laurel es el único acento que se sale de la familia. */
+  --color-porcelain: #fffdfb; /* superficies / tarjetas */
+  --color-cream: #f4f0ea; /* papel — fondo de página */
+  --color-linen: #eee9e5; /* velo greige para bandas */
+  --color-sand: #d4cbc4; /* marca aclarada — texto sobre superficies oscuras */
+  --color-mocha: #bcafa6; /* COLOR DE MARCA */
+  --color-slate: #6c5f56; /* texto secundario */
+  --color-cocoa: #564539; /* acento profundo — itálicas, chips, botones */
+  --color-espresso: #2d251f; /* titulares y superficies oscuras */
+  --color-gold: #b7a87f; /* laurel — filetes y bordes */
+  --color-gold-ink: #806c3e; /* el mismo dorado, legible como texto */
+  --color-gold-soft: #e5e0ca;
+  --color-line: #e6dfdb;
+  --color-line-strong: #cac0b9;
 
+  --font-serif: var(--font-cormorant);
   --font-sans: var(--font-host);
   --font-mono: var(--font-fragment);
 
@@ -41,7 +45,7 @@
 
 :root {
   --background: var(--color-cream);
-  --foreground: var(--color-ink);
+  --foreground: var(--color-espresso);
 }
 
 html {
@@ -83,8 +87,8 @@ body {
 }
 
 ::selection {
-  background: var(--color-ink);
-  color: var(--color-cream);
+  background: var(--color-mocha);
+  color: var(--color-porcelain);
 }
 
 /* Tailwind v4 preflight sets buttons to cursor:default — restore pointer */
@@ -111,13 +115,19 @@ button:disabled {
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' /%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
-/* Poster-style uppercase display headline (Host Grotesk) */
+/* Luxury display — high-contrast serif, sentence case, airy leading.
+   Uppercase is reserved for the small mono labels, never for headlines. */
 .display {
-  font-family: var(--font-sans), "Host Grotesk", ui-sans-serif, sans-serif;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: -0.02em;
-  line-height: 0.9;
+  font-family: var(--font-serif), "Cormorant Garamond", ui-serif, Georgia, serif;
+  font-weight: 300;
+  letter-spacing: -0.015em;
+  line-height: 1;
+}
+
+.display em,
+.display .accent {
+  font-style: italic;
+  color: var(--color-cocoa);
 }
 
 /* Mono kicker / label */
@@ -145,4 +155,129 @@ button:disabled {
 
 .duotone {
   filter: saturate(1.02) contrast(1.02);
+}
+
+/* Gold hairline, echoing the laurel rules of the printed manual. */
+.rule-gold {
+  height: 1px;
+  background: linear-gradient(
+    to right,
+    transparent,
+    var(--color-gold) 15%,
+    var(--color-gold) 85%,
+    transparent
+  );
+}
+
+/* Warm veil — lays the brand's sensory seal over a warm photograph. */
+.veil::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    140deg,
+    color-mix(in srgb, var(--color-mocha) 22%, transparent),
+    transparent 55%
+  );
+  mix-blend-mode: multiply;
+}
+
+/* ---------------------------------------------------------------------------
+   Looping photo rails. Items carry their own trailing margin (never `gap`) so
+   the duplicated half is pixel-identical and the -50% wrap is seamless.
+--------------------------------------------------------------------------- */
+@keyframes loop-y {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(0, -50%, 0);
+  }
+}
+@keyframes loop-x {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+.loop-y,
+.loop-x {
+  will-change: transform;
+  animation-duration: var(--dur, 40s);
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+.loop-y {
+  animation-name: loop-y;
+}
+.loop-x {
+  animation-name: loop-x;
+}
+.loop-reverse {
+  animation-direction: reverse;
+}
+.loop-hold:hover .loop-y,
+.loop-hold:hover .loop-x {
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .loop-y,
+  .loop-x {
+    animation: none !important;
+  }
+}
+
+/* Soft fade at both ends of a rail so photos dissolve instead of getting cut. */
+.fade-y {
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent,
+    #000 10%,
+    #000 90%,
+    transparent
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    transparent,
+    #000 10%,
+    #000 90%,
+    transparent
+  );
+}
+.fade-x {
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent,
+    #000 6%,
+    #000 94%,
+    transparent
+  );
+  mask-image: linear-gradient(
+    to right,
+    transparent,
+    #000 6%,
+    #000 94%,
+    transparent
+  );
+}
+
+/* Native horizontal rails (mobile fallbacks) — hide the bar, keep the snap. */
+.no-bar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.no-bar::-webkit-scrollbar {
+  display: none;
+}
+
+.grab {
+  cursor: grab;
+}
+.grab:active {
+  cursor: grabbing;
 }
