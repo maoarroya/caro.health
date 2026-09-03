@@ -94,6 +94,31 @@ export function buyerApprovedMail(
     };
   }
 
+  if (format.pickup) {
+    const { pickup } = libro.book;
+    return {
+      to: opts.to,
+      replyTo: brand.email,
+      subject: `Tu pedido: ${book.title} · reclámalo en ${pickup.place}`,
+      html: layout(
+        `Tu ejemplar físico te espera en <em style="color:#564539">${esc(pickup.place)}</em>.`,
+        `<p style="margin:0">${hola} Gracias por tu compra. ${esc(pickup.instructions)}</p>
+         <p style="margin:20px 0 0"><strong>Número de pedido:</strong> ${esc(tx.reference)}</p>
+         ${summaryHtml(tx, format)}
+         <p style="margin:20px 0 0">Muestra este correo o el número de pedido junto con tu cédula.</p>`,
+      ),
+      text: [
+        `${hola.replace(/<[^>]+>/g, "")} Gracias por tu compra de "${book.title}" en físico.`,
+        `Reclámalo en ${pickup.place}. ${pickup.instructions}`,
+        `Número de pedido: ${tx.reference}`,
+        "",
+        summaryText(tx, format),
+        "",
+        `${brand.name} · ${brand.email}`,
+      ].join("\n"),
+    };
+  }
+
   const lines = shippingLines(tx);
   return {
     to: opts.to,
@@ -127,6 +152,7 @@ export function merchantOrderMail(
   const lines = shippingLines(tx);
   const name = tx.customer_data?.full_name ?? tx.shipping_address?.name ?? "";
   const phone = tx.customer_data?.phone_number ?? tx.shipping_address?.phone_number ?? "";
+  const legalId = tx.customer_data?.legal_id ?? "";
   const tag = opts.sandbox ? "[SANDBOX] " : "";
   const dashboard = "https://comercios.wompi.co/transactions";
 
@@ -136,8 +162,14 @@ export function merchantOrderMail(
     subject: `${tag}Nuevo pedido · ${format.name} · ${tx.reference}`,
     html: layout(
       `Nuevo pedido del libro: <em style="color:#564539">${esc(format.name)}</em>.`,
-      `<p style="margin:0"><strong>Compradora</strong><br>${esc(name || "—")}<br><a href="mailto:${esc(opts.buyerEmail)}" style="color:#564539">${esc(opts.buyerEmail)}</a>${phone ? `<br>Tel. ${esc(phone)}` : ""}</p>
-       ${format.needsShipping ? `<p style="margin:20px 0 0"><strong>Enviar a</strong><br>${lines.length ? lines.map(esc).join("<br>") : "Sin dirección en Wompi: contactar a la compradora"}</p>` : `<p style="margin:20px 0 0">Formato digital: el enlace de descarga ya se envió automáticamente.</p>`}
+      `<p style="margin:0"><strong>Compradora</strong><br>${esc(name || "—")}<br><a href="mailto:${esc(opts.buyerEmail)}" style="color:#564539">${esc(opts.buyerEmail)}</a>${phone ? `<br>Tel. ${esc(phone)}` : ""}${legalId ? `<br>Cédula ${esc(legalId)}` : ""}</p>
+       ${
+         format.pickup
+           ? `<p style="margin:20px 0 0"><strong>Entrega en ${esc(libro.book.pickup.place)}</strong><br>La compradora reclama con su cédula${legalId ? ` (${esc(legalId)})` : ""} y el pedido ${esc(tx.reference)}.</p>`
+           : format.needsShipping
+             ? `<p style="margin:20px 0 0"><strong>Enviar a</strong><br>${lines.length ? lines.map(esc).join("<br>") : "Sin dirección en Wompi: contactar a la compradora"}</p>`
+             : `<p style="margin:20px 0 0">Formato digital: el enlace de descarga ya se envió automáticamente.</p>`
+       }
        ${summaryHtml(tx, format)}
        <p style="margin:20px 0 0;font-size:13px">Transacción Wompi <code>${esc(tx.id)}</code> · <a href="${dashboard}" style="color:#564539">Abrir panel de Wompi</a></p>`,
     ),
@@ -147,8 +179,13 @@ export function merchantOrderMail(
       `Compradora: ${name || "—"}`,
       `Email: ${opts.buyerEmail}`,
       phone ? `Teléfono: ${phone}` : "",
+      legalId ? `Cédula: ${legalId}` : "",
       "",
-      format.needsShipping ? `Enviar a:\n${lines.join("\n") || "Sin dirección en Wompi"}` : "Digital: enlace de descarga enviado automáticamente.",
+      format.pickup
+        ? `Entrega en ${libro.book.pickup.place}: reclama con cédula${legalId ? ` (${legalId})` : ""} y pedido ${tx.reference}.`
+        : format.needsShipping
+          ? `Enviar a:\n${lines.join("\n") || "Sin dirección en Wompi"}`
+          : "Digital: enlace de descarga enviado automáticamente.",
       "",
       summaryText(tx, format),
       `Transacción Wompi: ${tx.id}`,

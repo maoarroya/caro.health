@@ -42,7 +42,14 @@ export type CheckoutInput = {
   currency?: "COP";
   redirectUrl: string;
   expirationTime?: string; // ISO 8601
-  customer?: { email: string; fullName: string; phone?: string; phonePrefix?: string };
+  customer?: {
+    email: string;
+    fullName: string;
+    phone?: string;
+    phonePrefix?: string;
+    legalId?: string;
+    legalIdType?: "CC" | "CE" | "NIT" | "PP" | "TI" | "DNI" | "RG" | "OTHER";
+  };
   shipping?: {
     name: string;
     addressLine1: string;
@@ -78,6 +85,10 @@ export function buildCheckoutUrl(input: CheckoutInput): string {
     params.set("customer-data:full-name", c.fullName);
     if (c.phone) params.set("customer-data:phone-number", c.phone);
     if (c.phonePrefix) params.set("customer-data:phone-number-prefix", c.phonePrefix);
+    if (c.legalId) {
+      params.set("customer-data:legal-id", c.legalId);
+      params.set("customer-data:legal-id-type", c.legalIdType ?? "CC");
+    }
   }
   const s = input.shipping;
   if (s) {
@@ -106,7 +117,7 @@ export type WompiTransaction = {
   payment_method_type?: string | null;
   created_at?: string;
   finalized_at?: string | null;
-  customer_data?: { full_name?: string; phone_number?: string } | null;
+  customer_data?: { full_name?: string; phone_number?: string; legal_id?: string; legal_id_type?: string } | null;
   shipping_address?: {
     name?: string;
     address_line_1?: string;

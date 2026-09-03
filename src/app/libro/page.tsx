@@ -11,7 +11,7 @@ import { FinalCta } from "@/components/sections/FinalCta";
 export const metadata: Metadata = {
   title: "Libro",
   description:
-    "Tú puedes ser libre, el libro de Carolina Velásquez (Caro Health): una guía para alcanzar la gloria a través de tus hábitos. 20 capítulos, tapa dura y digital.",
+    "Tú puedes ser libre, el libro de Carolina Velásquez (Caro Health): una guía para alcanzar la gloria a través de tus hábitos. 20 capítulos, en físico y digital.",
 };
 
 const { book, forWho } = libro;

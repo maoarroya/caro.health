@@ -7,7 +7,7 @@ export const getFormat = (id: string): BookFormat | undefined =>
   libro.book.formats.find((f) => f.id === id);
 
 const REF_PREFIX = "LIBRO";
-const refTag: Record<BookFormatId, string> = { digital: "DIG", "tapa-dura": "TAPA" };
+const refTag: Record<BookFormatId, string> = { digital: "DIG", fisico: "FIS" };
 
 /** LIBRO-DIG-m1x9k2-4f3a — legible en el panel de Wompi y parseable aquí. */
 export function makeReference(format: BookFormatId): string {

@@ -12,11 +12,13 @@ type Body = {
   city?: string;
   region?: string;
   postalCode?: string;
+  legalId?: string;
 };
 
 const clean = (v: unknown, max = 120) => String(v ?? "").trim().slice(0, max);
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 const PHONE = /^\+?\d{7,15}$/;
+const LEGAL_ID = /^\d{5,12}$/;
 
 /** Builds a signed Wompi checkout link for one copy of the book. */
 export async function POST(req: Request) {
@@ -42,6 +44,11 @@ export async function POST(req: Request) {
   const phone = clean(body.phone, 20).replace(/[\s()-]/g, "");
   if (!EMAIL.test(email)) return NextResponse.json({ error: "Revisa tu email." }, { status: 400 });
   if (fullName.length < 3) return NextResponse.json({ error: "Escribe tu nombre completo." }, { status: 400 });
+
+  const legalId = clean(body.legalId, 16).replace(/[.\s-]/g, "");
+  if (format.pickup && !LEGAL_ID.test(legalId)) {
+    return NextResponse.json({ error: "Escribe tu cédula: con ella reclamas el libro." }, { status: 400 });
+  }
 
   let shipping;
   if (format.needsShipping) {
@@ -72,7 +79,13 @@ export async function POST(req: Request) {
     amountInCents: format.priceCop * 100,
     currency: "COP",
     redirectUrl: `${origin}/libro/gracias`,
-    customer: { email, fullName, phone: PHONE.test(phone) ? phone : undefined },
+    customer: {
+      email,
+      fullName,
+      phone: PHONE.test(phone) ? phone : undefined,
+      legalId: format.pickup ? legalId : undefined,
+      legalIdType: "CC",
+    },
     shipping,
   });
 

@@ -120,8 +120,9 @@ export default async function GraciasPage({ searchParams }: { searchParams: Prom
         ) : (
           <>
             <p>
-              Tu ejemplar en tapa dura sale en camino a la dirección que registraste en el pago.
-              Llega en 5 a 8 días hábiles; te escribimos al correo del pedido con la guía de envío.
+              Tu ejemplar físico te espera en <strong className="text-espresso">{libro.book.pickup.place}</strong>.
+              {" "}{libro.book.pickup.instructions} Tu número de pedido es{" "}
+              <strong className="text-espresso">{tx.reference}</strong>.
             </p>
             {mailConfigured() && tx.customer_email && (
               <p className="mono text-xs uppercase tracking-[0.12em] text-slate/60">

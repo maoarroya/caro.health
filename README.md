@@ -46,15 +46,16 @@ pedido (email, dirección, estado) y Caro recibe un correo por cada compra.
    llama a `POST /api/wompi/checkout`.
 2. La ruta arma la referencia (`LIBRO-DIG-…` / `LIBRO-TAPA-…`), firma la
    integridad (`SHA256(ref+monto+moneda+secreto)`) y devuelve la URL de Wompi
-   (`src/lib/wompi.ts`). Para tapa dura se envían nombre, teléfono y dirección
-   como `shipping-address:*`, así el pedido queda completo en el panel de Wompi.
+   (`src/lib/wompi.ts`). Para el físico se envía la cédula como
+   `customer-data:legal-id`: el libro se reclama en Nirvana Spa presentándola.
 3. Wompi redirige a `/libro/gracias?id=<transacción>`. La página consulta la
    transacción con la llave pública y muestra el estado real (nunca confía en
    el redirect). Si es digital y APPROVED, muestra el botón de descarga.
 4. `POST /api/wompi/events` (webhook) es el momento fiable: valida el checksum
    con el secreto de eventos y, si el pago está APPROVED, envía a la compradora
-   el PDF (enlace firmado, 30 días) o la confirmación de envío, y a Caro el
-   aviso de pedido con los datos para despachar (`src/lib/order-emails.ts`).
+   el PDF (enlace firmado, 30 días) o las instrucciones para reclamar el
+   físico, y a Caro el aviso de pedido con nombre, cédula y referencia
+   (`src/lib/order-emails.ts`).
    Cubre los pagos PSE que se aprueban minutos después de salir del checkout.
 5. `GET /api/libro/descargar?token=…` vuelve a verificar el pago en Wompi y
    sirve el PDF desde `private/libro.pdf` o, si no existe en disco, desde
@@ -80,7 +81,7 @@ pedido (email, dirección, estado) y Caro recibe un correo por cada compra.
 - Sandbox de Wompi: tarjeta `4242 4242 4242 4242` aprueba, `4111 1111 1111 1111`
   rechaza (cualquier fecha futura y CVC).
 - Webhook sin pagar: `npm run wompi:simulate -- --email tu@correo.com`
-  (o `--format tapa-dura`, `--status DECLINED`) firma un evento con tu secreto
+  (o `--format fisico`, `--status DECLINED`) firma un evento con tu secreto
   y lo envía al servidor local; verás el correo y el log.
 
 Precios en COP en `src/lib/content.ts` (`libro.book.formats`).

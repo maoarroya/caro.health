@@ -69,7 +69,7 @@ export const home = {
       {
         no: "01",
         title: "Libro",
-        text: "Tú puedes ser libre: una guía para alcanzar la gloria a través de tus hábitos. En tapa dura y en digital.",
+        text: "Tú puedes ser libre: una guía para alcanzar la gloria a través de tus hábitos. En físico y en digital.",
         href: "/libro",
         photo: p(123),
       },
@@ -180,7 +180,7 @@ export const chMethod = {
 // 01 · LIBRO
 // ---------------------------------------------------------------------------
 
-export type BookFormatId = "digital" | "tapa-dura";
+export type BookFormatId = "digital" | "fisico";
 
 export type BookFormat = {
   id: BookFormatId;
@@ -188,7 +188,10 @@ export type BookFormat = {
   priceCop: number;
   note: string;
   delivery: string;
+  /** Pide dirección y la envía a Wompi como shipping-address. */
   needsShipping: boolean;
+  /** Se reclama en persona: pide cédula para verificar la entrega. */
+  pickup: boolean;
 };
 
 export const libro = {
@@ -237,20 +240,27 @@ export const libro = {
       {
         id: "digital",
         name: "Digital",
-        priceCop: 79000,
+        priceCop: 35000,
         note: "PDF · Descarga inmediata",
         delivery: "Recibes el enlace de descarga apenas Wompi apruebe el pago.",
         needsShipping: false,
+        pickup: false,
       },
       {
-        id: "tapa-dura",
-        name: "Tapa dura",
-        priceCop: 189000,
-        note: "Envío nacional incluido",
-        delivery: "Lo enviamos a tu dirección en Colombia en 5 a 8 días hábiles.",
-        needsShipping: true,
+        id: "fisico",
+        name: "Físico",
+        priceCop: 60000,
+        note: "Reclama en Nirvana Spa con tu cédula",
+        delivery: "Después del pago, reclama tu ejemplar en Nirvana Spa presentando tu cédula.",
+        needsShipping: false,
+        pickup: true,
       },
     ] as BookFormat[],
+    // Punto de entrega del libro físico.
+    pickup: {
+      place: "Nirvana Spa",
+      instructions: "Presenta tu cédula y el número de pedido. Te lo entregamos en recepción.",
+    },
     photo: p(119),
     author_photos: ps(117, 127, 126),
   },

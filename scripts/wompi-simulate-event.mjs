@@ -3,7 +3,7 @@
 // logs sin pagar nada. Usa WOMPI_EVENTS_SECRET de .env.local para firmar.
 //
 //   node scripts/wompi-simulate-event.mjs --email tu@correo.com
-//   node scripts/wompi-simulate-event.mjs --format tapa-dura --status APPROVED
+//   node scripts/wompi-simulate-event.mjs --format fisico --status APPROVED
 //   node scripts/wompi-simulate-event.mjs --url https://tu-dominio.com --status DECLINED
 import { createHash } from "node:crypto";
 import { readFileSync } from "node:fs";
@@ -12,15 +12,17 @@ const args = Object.fromEntries(
   process.argv.slice(2).map((a, i, all) => (a.startsWith("--") ? [a.slice(2), all[i + 1] ?? "true"] : [])).filter((p) => p.length),
 );
 
+// Misma precedencia que Next: .env y encima .env.local.
 const env = {};
-try {
-  for (const line of readFileSync(".env.local", "utf8").split("\n")) {
-    const m = line.match(/^\s*([A-Z0-9_]+)\s*=\s*(.*?)\s*$/);
-    if (m && !line.trim().startsWith("#")) env[m[1]] = m[2].replace(/^["']|["']$/g, "");
+for (const file of [".env", ".env.local"]) {
+  try {
+    for (const line of readFileSync(file, "utf8").split("\n")) {
+      const m = line.match(/^\s*([A-Z0-9_]+)\s*=\s*(.*?)\s*$/);
+      if (m && !line.trim().startsWith("#") && m[2] !== "") env[m[1]] = m[2].replace(/^["']|["']$/g, "");
+    }
+  } catch {
+    /* archivo opcional */
   }
-} catch {
-  console.error("No encontré .env.local (copia .env.example y pega las llaves).");
-  process.exit(1);
 }
 
 const secret = env.WOMPI_EVENTS_SECRET;
@@ -29,8 +31,8 @@ if (!secret) {
   process.exit(1);
 }
 
-const format = args.format === "tapa-dura" ? "TAPA" : "DIG";
-const amount = format === "TAPA" ? 189000 * 100 : 79000 * 100;
+const format = args.format === "fisico" ? "FIS" : "DIG";
+const amount = format === "FIS" ? 60000 * 100 : 35000 * 100;
 const status = (args.status || "APPROVED").toUpperCase();
 const reference = `LIBRO-${format}-${Date.now().toString(36)}-sim1`;
 const id = `sim-${Date.now()}-${Math.floor(Math.random() * 1e5)}`;
@@ -45,10 +47,8 @@ const transaction = {
   payment_method_type: "CARD",
   redirect_url: `${args.url || "http://localhost:3000"}/libro/gracias`,
   status,
-  shipping_address:
-    format === "TAPA"
-      ? { name: "Prueba Simulada", address_line_1: "Calle 1 # 2-3", city: "Medellín", region: "Antioquia", country: "CO", phone_number: "3001234567" }
-      : null,
+  customer_data: format === "FIS" ? { full_name: "Prueba Simulada", legal_id: "1234567890", legal_id_type: "CC" } : null,
+  shipping_address: null,
   payment_link_id: null,
   payment_source_id: null,
 };

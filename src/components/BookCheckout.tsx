@@ -58,7 +58,8 @@ export function BookCheckout({ initial = "digital" }: { initial?: BookFormatId }
           <Reveal delay={0.1}>
             <p className="mt-7 max-w-md text-lg leading-relaxed text-slate">
               Pago seguro en pesos colombianos con tarjeta, PSE, Nequi o Bancolombia. El
-              digital se descarga al instante; la tapa dura llega a tu casa.
+              digital se descarga al instante; el físico lo reclamas en {libro.book.pickup.place} con tu
+              cédula.
             </p>
           </Reveal>
 
@@ -104,6 +105,13 @@ export function BookCheckout({ initial = "digital" }: { initial?: BookFormatId }
             <span className={label}>Email</span>
             <input name="email" type="email" required className={field} placeholder="tu@email.com" autoComplete="email" />
           </label>
+
+          {format.pickup && (
+            <label className="grid gap-2 sm:col-span-2">
+              <span className={label}>Cédula (con ella reclamas el libro)</span>
+              <input name="legalId" required inputMode="numeric" pattern="[0-9.\s-]{5,16}" className={field} placeholder="1234567890" />
+            </label>
+          )}
 
           {format.needsShipping ? (
             <>
