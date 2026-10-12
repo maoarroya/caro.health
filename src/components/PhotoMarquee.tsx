@@ -13,7 +13,6 @@ import {
   wrap,
 } from "motion/react";
 import { Frame } from "@/components/Frame";
-import type { Photo } from "@/lib/photos";
 
 /**
  * A rail that drifts on its own and then leans into the page's scroll velocity —
@@ -22,7 +21,7 @@ import type { Photo } from "@/lib/photos";
  * `uniform` crops every frame to the same portrait ratio, which is what the
  * homepage wants: one calm rhythm instead of a collage.
  */
-export function PhotoMarquee({
+export function PhotoMarquee<T extends { src: string; w: number; h: number; blur?: string }>({
   photos,
   baseVelocity = 1.4,
   height = "h-72 lg:h-[26rem]",
@@ -30,11 +29,11 @@ export function PhotoMarquee({
   onSelect,
   className = "",
 }: {
-  photos: Photo[];
+  photos: T[];
   baseVelocity?: number;
   height?: string;
   uniform?: boolean;
-  onSelect?: (photo: Photo) => void;
+  onSelect?: (photo: T) => void;
   className?: string;
 }) {
   const baseX = useMotionValue(0);

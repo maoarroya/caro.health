@@ -1,11 +1,14 @@
 import Link from "next/link";
-import { home } from "@/lib/content";
+import { defaultLanding, type LandingData } from "@/lib/landing";
 import { Frame } from "@/components/Frame";
 import { Reveal, RevealGroup, RevealItem, TextReveal } from "@/components/Reveal";
 
-/** The five business verticals as one editorial index. */
-export function Verticals() {
-  const { verticals } = home;
+/** The business verticals as one editorial index. */
+export function Verticals({
+  data: verticals = defaultLanding.verticals,
+}: {
+  data?: LandingData["verticals"];
+}) {
   return (
     <section className="px-5 py-24 lg:px-8 lg:py-32">
       <div className="mx-auto max-w-7xl">
@@ -17,14 +20,14 @@ export function Verticals() {
         </h2>
 
         <RevealGroup className="mt-16 flex flex-col" stagger={0.08}>
-          {verticals.items.map((item) => (
-            <RevealItem key={item.href}>
+          {verticals.items.map((item, i) => (
+            <RevealItem key={i}>
               <Link
                 href={item.href}
                 className="group grid items-center gap-6 border-t border-line py-7 transition-colors hover:border-sand md:grid-cols-[4rem_1fr_1.1fr_3rem] md:gap-10"
               >
                 <span className="mono text-xs uppercase tracking-[0.16em] text-gold-ink">
-                  {item.no}
+                  {String(i + 1).padStart(2, "0")}
                 </span>
 
                 <h3 className="display text-4xl text-espresso transition-colors group-hover:text-cocoa lg:text-5xl">

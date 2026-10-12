@@ -90,6 +90,29 @@ pedido (email, dirección, estado) y Caro recibe un correo por cada compra.
 
 Precios en COP en `src/lib/content.ts` (`libro.book.formats`).
 
+## Builder de la landing
+
+`/builder` es el editor de la home: la dueña del sitio cambia textos, fotos,
+el orden de las secciones (o las oculta) y arma los **cursos en video** con
+enlaces de YouTube, con vista previa en vivo en computador y celular. Al
+pulsar **Publicar** la home se regenera.
+
+- **Acceso**: contraseña fija, guardada como huella scrypt en
+  `src/lib/builder-auth.ts` (sesión de 30 días). `BUILDER_PASSWORD` la
+  reemplaza sin tocar código.
+- **Qué edita**: solo la home (`src/components/Landing.tsx`) y el llamado
+  final que comparten Libro, Retiros y Blog. Las páginas interiores siguen en
+  `src/lib/content.ts`, que también da los valores por defecto de la home.
+- **Dónde se guarda** (`src/lib/landing-store.ts`): con
+  `BLOB_READ_WRITE_TOKEN`, en Vercel Blob (obligatorio en Vercel, donde no hay
+  disco); sin él, en `./data/landing.json` y `./data/uploads` (ignorados por
+  git). Todo lo que entra pasa por `sanitizeLanding` (`src/lib/landing.ts`).
+- **Fotos**: se eligen del archivo (`/public/photos`) o se suben; el navegador
+  las reduce a JPEG de 2400 px antes de enviarlas.
+- **Cursos**: cada curso es una lista de clases; se pegan uno o varios enlaces
+  de YouTube y el título se rellena solo. La sección no aparece en el sitio
+  mientras no haya al menos una clase.
+
 ## Getting Started
 
 First, run the development server:

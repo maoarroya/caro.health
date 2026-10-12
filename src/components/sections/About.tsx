@@ -1,11 +1,14 @@
 import { Frame } from "@/components/Frame";
 import { Sprig } from "@/components/Sprig";
-import { images, home } from "@/lib/content";
+import { defaultLanding, type LandingData } from "@/lib/landing";
 import { Reveal, TextReveal } from "@/components/Reveal";
 
 /** Founder authority: the clinical credential is the product here. */
-export function About() {
-  const { authority } = home;
+export function About({
+  data: authority = defaultLanding.about,
+}: {
+  data?: LandingData["about"];
+}) {
   return (
     <section id="sobre-mi" className="bg-linen/50 px-5 py-24 lg:px-8 lg:py-32">
       <div className="mx-auto max-w-7xl">
@@ -13,7 +16,7 @@ export function About() {
           <div className="relative order-2 lg:order-1">
             <Reveal>
               <Frame
-                photo={images.founder.portrait}
+                photo={authority.portrait}
                 alt="Caro, nutricionista y creadora del CH Method"
                 className="aspect-4/5 rounded-4xl"
                 imgClassName="duotone"
@@ -22,7 +25,7 @@ export function About() {
             </Reveal>
             <div className="absolute -bottom-6 -right-3 hidden w-48 overflow-hidden rounded-2xl border-4 border-porcelain md:block lg:-right-8 lg:w-56">
               <Frame
-                photo={images.founder.detail}
+                photo={authority.detail}
                 className="aspect-4/3"
                 imgClassName="duotone"
                 sizes="224px"
@@ -42,16 +45,16 @@ export function About() {
             </h2>
             <Reveal delay={0.1}>
               <div className="mt-8 space-y-5 text-lg leading-relaxed text-slate">
-                {authority.body.map((paragraph) => (
-                  <p key={paragraph}>{paragraph}</p>
+                {authority.body.map((paragraph, i) => (
+                  <p key={i}>{paragraph}</p>
                 ))}
               </div>
             </Reveal>
             <Reveal delay={0.15}>
               <ul className="mt-10 grid gap-3 border-t border-line pt-8 sm:grid-cols-2">
-                {authority.credentials.map((credential) => (
+                {authority.credentials.map((credential, i) => (
                   <li
-                    key={credential}
+                    key={i}
                     className="mono flex items-start gap-3 text-xs uppercase tracking-[0.12em] text-slate"
                   >
                     <Sprig className="mt-px h-3.5 w-3.5 shrink-0 text-cocoa" />

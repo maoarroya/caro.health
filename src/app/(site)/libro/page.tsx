@@ -6,7 +6,7 @@ import { Frame } from "@/components/Frame";
 import { BookCheckout } from "@/components/BookCheckout";
 import { Sprig } from "@/components/Sprig";
 import { Reveal, RevealGroup, RevealItem } from "@/components/Reveal";
-import { FinalCta } from "@/components/sections/FinalCta";
+import { SiteCta } from "@/components/sections/SiteCta";
 
 export const metadata: Metadata = {
   title: "Libro",
@@ -199,7 +199,7 @@ export default function LibroPage() {
       </section>
 
       <BookCheckout />
-      <FinalCta />
+      <SiteCta />
     </>
   );
 }

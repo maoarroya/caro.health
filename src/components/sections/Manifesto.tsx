@@ -1,9 +1,12 @@
-import { home, images } from "@/lib/content";
+import { defaultLanding, type LandingData } from "@/lib/landing";
 import { Frame } from "@/components/Frame";
 import { Parallax, Reveal, TextReveal } from "@/components/Reveal";
 
-export function Manifesto() {
-  const { manifesto } = home;
+export function Manifesto({
+  data: manifesto = defaultLanding.manifesto,
+}: {
+  data?: LandingData["manifesto"];
+}) {
   return (
     <section className="px-5 lg:px-8">
       <div className="mx-auto max-w-7xl">
@@ -12,7 +15,7 @@ export function Manifesto() {
           <div className="veil relative aspect-4/5 w-full overflow-hidden sm:aspect-video">
             <Parallax amount={70} className="absolute -inset-y-24 inset-x-0">
               <Frame
-                photo={images.manifesto}
+                photo={manifesto.photo}
                 alt="Práctica consciente"
                 className="h-full w-full"
                 sizes="(max-width: 1024px) 95vw, 1400px"

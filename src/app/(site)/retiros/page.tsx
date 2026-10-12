@@ -4,7 +4,7 @@ import { Frame } from "@/components/Frame";
 import { PageHero } from "@/components/PageHero";
 import { Reveal, RevealGroup, RevealItem, TextReveal } from "@/components/Reveal";
 import { Gallery } from "@/components/sections/Gallery";
-import { FinalCta } from "@/components/sections/FinalCta";
+import { SiteCta } from "@/components/sections/SiteCta";
 
 export const metadata: Metadata = {
   title: "Retiros wellness y experiencias",
@@ -112,7 +112,7 @@ export default function RetirosPage() {
       <div id="archivo" className="scroll-mt-24">
         <Gallery />
       </div>
-      <FinalCta />
+      <SiteCta />
     </>
   );
 }

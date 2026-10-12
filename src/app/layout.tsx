@@ -1,10 +1,6 @@
 import type { Metadata } from "next";
 import { Host_Grotesk, Fragment_Mono, Cormorant_Garamond } from "next/font/google";
 import "./globals.css";
-import { Nav } from "@/components/Nav";
-import { Footer } from "@/components/Footer";
-import { SmoothScroll } from "@/components/SmoothScroll";
-import { ScrollProgress } from "@/components/ScrollProgress";
 
 const host = Host_Grotesk({
   variable: "--font-host",
@@ -69,11 +65,7 @@ export default function RootLayout({
       className={`${host.variable} ${fragment.variable} ${cormorant.variable} h-full antialiased`}
     >
       <body className="grain min-h-full bg-cream text-espresso flex flex-col">
-        <SmoothScroll />
-        <ScrollProgress />
-        <Nav />
-        <main className="flex-1">{children}</main>
-        <Footer />
+        {children}
       </body>
     </html>
   );

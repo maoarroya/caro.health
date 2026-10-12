@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { blog } from "@/lib/content";
 import { PageHero } from "@/components/PageHero";
 import { BlogGrid } from "@/components/sections/BlogGrid";
-import { FinalCta } from "@/components/sections/FinalCta";
+import { SiteCta } from "@/components/sections/SiteCta";
 
 export const metadata: Metadata = {
   title: "Blog",
@@ -23,7 +23,7 @@ export default function BlogPage() {
         body={blog.body}
       />
       <BlogGrid />
-      <FinalCta />
+      <SiteCta />
     </>
   );
 }

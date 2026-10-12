@@ -1,9 +1,9 @@
 import Image from "next/image";
 import type { CSSProperties } from "react";
-import type { Photo } from "@/lib/photos";
 
 type FrameProps = {
-  photo: Photo;
+  /** Solo `src` y `blur`: sirve una foto del archivo o una subida desde el builder. */
+  photo: { src: string; blur?: string };
   alt?: string;
   /** Sizes hint — always pass one, every frame is rendered with `fill`. */
   sizes?: string;
@@ -45,7 +45,7 @@ export function Frame({
         fill
         sizes={sizes}
         priority={priority}
-        placeholder="blur"
+        placeholder={photo.blur ? "blur" : "empty"}
         blurDataURL={photo.blur}
         className={`object-cover ${imgClassName}`}
       />

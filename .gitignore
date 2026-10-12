@@ -54,3 +54,6 @@ next-env.d.ts
 # material de marca en bruto (repo público): no se versiona
 /manual de marca.pdf
 /WhatsApp Image *.jpeg
+
+# lo que se edita en /builder cuando se guarda en disco (contenido y fotos subidas)
+/data
